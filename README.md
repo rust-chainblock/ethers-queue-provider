@@ -17,11 +17,11 @@
 
 ## About
 
-> Fastest, fault tolerant multi node ethers.js compatible JSONRPC Batch provider
+> Ethers.js compatible JSONRPC provider with support of Axios, Batching, and automated request Queue
 
 **AxiosQueueProvider** is an easy to use [ethers.js v5](https://docs.ethers.io/v5/) compatible Ethereum Javascript (Typescript) JSONRPC API Provider powered by a powerful [Axios](https://axios-http.com/) HTTP client wrapped by [axios-auto](https://ayanamitech.github.io/axios-auto) library to help your automated error handling & [Promise.any](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/any) powered client-side load balancing feature.
 
-It supports sending several Request objects and will expect to receive array of retun objects following the specification of [Batching by JSON RPC 2.0](https://www.jsonrpc.org/specification#batch).
+It supports sending several Request objects and will expect to receive array of returned objects following the specification of [Batching by JSON RPC 2.0](https://www.jsonrpc.org/specification#batch).
 
 **Features:**
 
