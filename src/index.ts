@@ -56,15 +56,15 @@ export interface queueConfig {
   */
   carryoverConcurrencyCount?: boolean;
   /**
-	Per-operation timeout in milliseconds. Operations fulfill once `timeout` elapses if they haven't already.
-	*/
+  Per-operation timeout in milliseconds. Operations fulfill once `timeout` elapses if they haven't already.
+  */
   timeout?: number;
 
   /**
-	Whether or not a timeout is considered an exception.
+  Whether or not a timeout is considered an exception.
 
-	@default false
-	*/
+  @default false
+  */
   throwOnTimeout?: boolean;
 }
 
