@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "typeRoots": [
+      "./node_modules/@types",
+    ],
+    "target": "ES2018",
+    "module": "nodenext",
+    "moduleResolution": "node",
+    "removeComments": true,
+    "strict": true,
+    "downlevelIteration": true,
+    "skipLibCheck": true,
+    "importHelpers": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "outDir": "types",
+		"declaration": true,
+		"emitDeclarationOnly": true
+  },
+  "include": ["./src/**/*"]
+}
