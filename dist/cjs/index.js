@@ -32,7 +32,7 @@ function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'defau
 
 var PQueue__default = /*#__PURE__*/_interopDefaultLegacy(PQueue);
 
-const version = "ethers-queue-provider@5.6.9-beta.0";
+const version = "ethers-queue-provider@5.6.9-beta.1";
 
 const logger = new ethers.utils.Logger(version);
 function sliceToChunks(array, size = 10) {
@@ -158,7 +158,8 @@ class AxiosBatchProvider extends ethers.providers.JsonRpcProvider {
         this._pendingBatchAggregator = null;
         return Promise.all(sliceToChunks(batch, this.batchSize).map((chunk) => {
           const request = chunk.map((inflight) => inflight.request);
-          return this._queue.add(() => axiosAuto.post(url, JSON.stringify(request), options).then((result) => {
+          const requestString = request.length === 1 ? JSON.stringify(request[0]) : JSON.stringify(request);
+          return this._queue.add(() => axiosAuto.post(url, requestString, options).then((result) => {
             if (!Array.isArray(result) || result.length === 1) {
               const payload2 = !Array.isArray(result) ? result : result[0];
               chunk.forEach((inflightRequest2) => {

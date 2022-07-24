@@ -14,12 +14,12 @@ describe('ethers-queue-provider', () => {
     const axiosInstance = axios;
     const mock = new MockAdapter(axiosInstance, { onNoMatch: 'throwException' });
     const provider = new AxiosQueueProvider('/', { axios: axiosInstance, timeout: 100, retryMax: 0 });
-    const chainId = [{ 'jsonrpc': '2.0', 'id': 1, 'result': '0x5' }];
-    const blockNumber = [{ 'jsonrpc': '2.0', 'id': 2, 'result': '0x1' }];
+    const chainId = { 'jsonrpc': '2.0', 'id': 1, 'result': '0x5' };
+    const blockNumber = { 'jsonrpc': '2.0', 'id': 2, 'result': '0x1' };
     mock
-      .onPost('/', [{ 'jsonrpc': '2.0', 'id': 1, 'method': 'eth_chainId', 'params': [] }])
+      .onPost('/', { 'jsonrpc': '2.0', 'id': 1, 'method': 'eth_chainId', 'params': [] })
       .reply(200, chainId)
-      .onPost('/', [{ 'jsonrpc': '2.0', 'id': 2, 'method': 'eth_blockNumber', 'params': [] }])
+      .onPost('/', { 'jsonrpc': '2.0', 'id': 2, 'method': 'eth_blockNumber', 'params': [] })
       .reply(200, blockNumber);
     const result = await provider.getBlockNumber();
     assert.deepEqual(result, 1);
@@ -29,7 +29,7 @@ describe('ethers-queue-provider', () => {
     const axiosInstance = axios;
     const mock = new MockAdapter(axiosInstance, { onNoMatch: 'throwException' });
     const provider = new AxiosQueueProvider('/', { axios: axiosInstance, timeout: 100, retryMax: 0 });
-    const chainId = [{ 'jsonrpc': '2.0', 'id': 1, 'result': '0x38' }];
+    const chainId = { 'jsonrpc': '2.0', 'id': 1, 'result': '0x38' };
     const getBlock = [
       { 'jsonrpc': '2.0', 'id': 2, 'result': '0x1' },
       {
@@ -68,7 +68,7 @@ describe('ethers-queue-provider', () => {
       }
     ];
     mock
-      .onPost('/', [{ 'jsonrpc': '2.0', 'id': 1, 'method': 'eth_chainId', 'params': [] }])
+      .onPost('/', { 'jsonrpc': '2.0', 'id': 1, 'method': 'eth_chainId', 'params': [] })
       .reply(200, chainId)
       .onPost('/', [
         { 'jsonrpc': '2.0', 'id': 2, 'method': 'eth_blockNumber', 'params': [] },

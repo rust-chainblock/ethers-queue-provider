@@ -1,6 +1,6 @@
 {
   "name": "ethers-queue-provider",
-  "version": "5.6.9-beta.0",
+  "version": "5.6.9-beta.1",
   "description": "Ethers.js compatible JSONRPC provider with support of Axios, Batching, and automated request Queue",
   "license": "MIT",
   "author": "AyanamiTech <ayanami0330@protonmail.com>",

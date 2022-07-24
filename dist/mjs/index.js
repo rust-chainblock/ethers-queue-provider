@@ -26,7 +26,7 @@ import { post } from 'axios-auto';
 import { utils, providers } from 'ethers';
 import PQueue from 'browser-queue';
 
-const version = "ethers-queue-provider@5.6.9-beta.0";
+const version = "ethers-queue-provider@5.6.9-beta.1";
 
 const logger = new utils.Logger(version);
 function sliceToChunks(array, size = 10) {
@@ -152,7 +152,8 @@ class AxiosBatchProvider extends providers.JsonRpcProvider {
         this._pendingBatchAggregator = null;
         return Promise.all(sliceToChunks(batch, this.batchSize).map((chunk) => {
           const request = chunk.map((inflight) => inflight.request);
-          return this._queue.add(() => post(url, JSON.stringify(request), options).then((result) => {
+          const requestString = request.length === 1 ? JSON.stringify(request[0]) : JSON.stringify(request);
+          return this._queue.add(() => post(url, requestString, options).then((result) => {
             if (!Array.isArray(result) || result.length === 1) {
               const payload2 = !Array.isArray(result) ? result : result[0];
               chunk.forEach((inflightRequest2) => {

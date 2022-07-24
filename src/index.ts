@@ -263,8 +263,9 @@ export default class AxiosBatchProvider extends providers.JsonRpcProvider {
 
         return Promise.all(sliceToChunks(batch, this.batchSize).map(chunk => {
           const request = chunk.map(inflight => inflight.request);
+          const requestString = request.length === 1 ? JSON.stringify(request[0]) : JSON.stringify(request);
 
-          return this._queue.add(() => post(url, JSON.stringify(request), options).then((result) => {
+          return this._queue.add(() => post(url, requestString, options).then((result) => {
             if (!Array.isArray(result) || result.length === 1) {
               const payload = !Array.isArray(result) ? result : result[0];
               chunk.forEach((inflightRequest) => {

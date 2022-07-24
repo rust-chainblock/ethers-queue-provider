@@ -13,7 +13,7 @@ var PQueue__default = /*#__PURE__*/_interopDefaultLegacy(PQueue);
 var axios__default = /*#__PURE__*/_interopDefaultLegacy(axios);
 var MockAdapter__default = /*#__PURE__*/_interopDefaultLegacy(MockAdapter);
 
-const version = "ethers-queue-provider@5.6.9-beta.0";
+const version = "ethers-queue-provider@5.6.9-beta.1";
 
 const logger = new ethers.utils.Logger(version);
 function sliceToChunks(array, size = 10) {
@@ -139,7 +139,8 @@ class AxiosBatchProvider extends ethers.providers.JsonRpcProvider {
         this._pendingBatchAggregator = null;
         return Promise.all(sliceToChunks(batch, this.batchSize).map((chunk) => {
           const request = chunk.map((inflight) => inflight.request);
-          return this._queue.add(() => axiosAuto.post(url, JSON.stringify(request), options).then((result) => {
+          const requestString = request.length === 1 ? JSON.stringify(request[0]) : JSON.stringify(request);
+          return this._queue.add(() => axiosAuto.post(url, requestString, options).then((result) => {
             if (!Array.isArray(result) || result.length === 1) {
               const payload2 = !Array.isArray(result) ? result : result[0];
               chunk.forEach((inflightRequest2) => {
@@ -188,9 +189,9 @@ describe("ethers-queue-provider", () => {
     const axiosInstance = axios__default["default"];
     const mock = new MockAdapter__default["default"](axiosInstance, { onNoMatch: "throwException" });
     const provider = new AxiosBatchProvider("/", { axios: axiosInstance, timeout: 100, retryMax: 0 });
-    const chainId = [{ "jsonrpc": "2.0", "id": 1, "result": "0x5" }];
-    const blockNumber = [{ "jsonrpc": "2.0", "id": 2, "result": "0x1" }];
-    mock.onPost("/", [{ "jsonrpc": "2.0", "id": 1, "method": "eth_chainId", "params": [] }]).reply(200, chainId).onPost("/", [{ "jsonrpc": "2.0", "id": 2, "method": "eth_blockNumber", "params": [] }]).reply(200, blockNumber);
+    const chainId = { "jsonrpc": "2.0", "id": 1, "result": "0x5" };
+    const blockNumber = { "jsonrpc": "2.0", "id": 2, "result": "0x1" };
+    mock.onPost("/", { "jsonrpc": "2.0", "id": 1, "method": "eth_chainId", "params": [] }).reply(200, chainId).onPost("/", { "jsonrpc": "2.0", "id": 2, "method": "eth_blockNumber", "params": [] }).reply(200, blockNumber);
     const result = await provider.getBlockNumber();
     assert.strict.deepEqual(result, 1);
   });
@@ -198,7 +199,7 @@ describe("ethers-queue-provider", () => {
     const axiosInstance = axios__default["default"];
     const mock = new MockAdapter__default["default"](axiosInstance, { onNoMatch: "throwException" });
     const provider = new AxiosBatchProvider("/", { axios: axiosInstance, timeout: 100, retryMax: 0 });
-    const chainId = [{ "jsonrpc": "2.0", "id": 1, "result": "0x38" }];
+    const chainId = { "jsonrpc": "2.0", "id": 1, "result": "0x38" };
     const getBlock = [
       { "jsonrpc": "2.0", "id": 2, "result": "0x1" },
       {
@@ -236,7 +237,7 @@ describe("ethers-queue-provider", () => {
         }
       }
     ];
-    mock.onPost("/", [{ "jsonrpc": "2.0", "id": 1, "method": "eth_chainId", "params": [] }]).reply(200, chainId).onPost("/", [
+    mock.onPost("/", { "jsonrpc": "2.0", "id": 1, "method": "eth_chainId", "params": [] }).reply(200, chainId).onPost("/", [
       { "jsonrpc": "2.0", "id": 2, "method": "eth_blockNumber", "params": [] },
       { "jsonrpc": "2.0", "id": 3, "method": "eth_getBlockByNumber", "params": ["latest", false] }
     ]).reply(200, getBlock);
